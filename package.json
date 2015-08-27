@@ -1,0 +1,36 @@
+{
+  "name": "cron.js",
+  "version": "0.1.0",
+  "description": "Cron expressions parser and generator for JavaScript (browser and server)",
+  "main": "./dist/cron.js",
+  "dependencies": {
+    "babel": "^5.8.21"
+  },
+  "devDependencies": {
+    "babel-core": "^5.8.22",
+    "babel-loader": "^5.3.2",
+    "chai": "^3.2.0",
+    "mocha": "^2.3.2",
+    "webpack": "^1.12.0"
+  },
+  "scripts": {
+    "test": "mocha",
+    "start": "webpack && webpack --config webpack.dist.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vtex/cron.js.git"
+  },
+  "keywords": [
+    "cron",
+    "cron-expression",
+    "parse",
+    "generate"
+  ],
+  "author": "Gustavo Giserman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vtex/cron.js/issues"
+  },
+  "homepage": "https://github.com/vtex/cron.js#readme"
+}
