@@ -14,7 +14,7 @@
     "webpack": "^1.12.0"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --reporter=nyan",
     "start": "webpack && webpack --config webpack.dist.config.js"
   },
   "repository": {
