@@ -1,4 +1,21 @@
+/**
+ * Cron Utils
+ * @class
+ * @param {object}      data                      - Data to be used when generating new expression
+ * @param {number[]}    data.days                 - List of selected days, e.g.: [1, 2, 3] or ['MON', 'TUE', 'WED'] or [1, 'TUE', 3]
+ * @param {string}      data.startTime=00:00:00   - HH:mm:ss, e.g.: '18:30:00'
+ * @param {object}      options                   - Custom options
+ * @param {boolean}     options.optimize=false    - If expresison should have it's week days optimized when making or instantiating
+ * @param {boolean}     options.numeric=true      - If days of week should be represented as integers in new expression (instead of strings of 3 characters each)
+**/
 class Cron {
+
+  constructor(data, options) {
+    return {
+      data: data,
+      expression: Cron.make(data, options)
+    }
+  }
 
   static get DEFAULT_DATA() {
     return {
@@ -38,20 +55,12 @@ class Cron {
     };
   }
 
-  /*
-  data <Object>
-    days: <Array>
-      0-6 <Number> or 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT' <string>
-    startTime: 'HH:mm:ss' <string>
-  */
-
-  constructor(data, options) {
-    return {
-      data: data,
-      expression: Cron.make(data, options)
-    }
-  }
-
+  /**
+   * Generates a new Cron expression based on same data as new instance of Cron
+   * @method make
+   * @param {object}  data
+   * @param {object}  options
+  **/
   static make(data = { days: [], startTime: null }, options = {}) {
     options = {
       ...Cron.DEFAULT_OPTIONS,
@@ -131,8 +140,12 @@ class Cron {
     return typeof expression === 'string' ? expression : expression.join(' ');
   }
 
+  /**
+   * Parses an expression and returns respective detailed data object
+   * @method parse
+   * @param {string}  expression='* * * * * * *'  - Cron expression to be parsed
+  **/
   static parse(expression = '* * * * * * *') {
-    // TODO: Handle string days of week instead of integers (e.g.: 'MON', 'TUE')
     expression = expression.split(' ').slice(0, 7);
 
     let clockUnits = expression.slice(0, 3).map( unit => unit === '*' ? '00' : unit ) // array
@@ -182,6 +195,12 @@ class Cron {
 
   }
 
+  /**
+   * Optimizes days of week to ranges wherever possible
+   * @method optimize
+   * @param {string}  expression  - Cron expression to be optimized, e.g.: '* * * * * 1,2,3,4,5,6'
+   * @param {object}  options     - Same as when instantiating new Cron (excluding 'optimize' property, of course)
+  **/
   static optimize(expression, options) {
     options = {
       ...Cron.DEFAULT_OPTIONS,

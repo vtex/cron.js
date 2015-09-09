@@ -61,6 +61,16 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports) {
 
+	/**
+	 * Cron Utils
+	 * @class
+	 * @param {object}      data                      - Data to be used when generating new expression
+	 * @param {number[]}    data.days                 - List of selected days, e.g.: [1, 2, 3] or ['MON', 'TUE', 'WED'] or [1, 'TUE', 3]
+	 * @param {string}      data.startTime=00:00:00   - HH:mm:ss, e.g.: '18:30:00'
+	 * @param {object}      options                   - Custom options
+	 * @param {boolean}     options.optimize=false    - If expresison should have it's week days optimized when making or instantiating
+	 * @param {boolean}     options.numeric=true      - If days of week should be represented as integers in new expression (instead of strings of 3 characters each)
+	**/
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
@@ -74,58 +84,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 	var Cron = (function () {
-	  _createClass(Cron, null, [{
-	    key: 'DEFAULT_DATA',
-	    get: function get() {
-	      return {
-	        days: [],
-	        startTime: '00:00:00'
-	      };
-	    }
-	  }, {
-	    key: 'DAYS_MAP',
-	    get: function get() {
-	      return {
-	        0: 'SUN',
-	        1: 'MON',
-	        2: 'TUE',
-	        3: 'WED',
-	        4: 'THU',
-	        5: 'FRI',
-	        6: 'SAT'
-	      };
-	    }
-	  }, {
-	    key: 'REVERSE_DAYS_MAP',
-	    get: function get() {
-	      var originalMap = Cron.DAYS_MAP,
-	          reverseMap = {},
-	          keyArr = Object.keys(originalMap);
-
-	      for (var i = 0; i < keyArr.length; i++) {
-	        reverseMap[originalMap[i]] = i;
-	      }
-
-	      return reverseMap;
-	    }
-	  }, {
-	    key: 'DEFAULT_OPTIONS',
-	    get: function get() {
-	      return {
-	        optimize: false,
-	        numeric: true
-	      };
-	    }
-
-	    /*
-	    data <Object>
-	      days: <Array>
-	        0-6 <Number> or 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT' <string>
-	      startTime: 'HH:mm:ss' <string>
-	    */
-
-	  }]);
-
 	  function Cron(data, options) {
 	    _classCallCheck(this, Cron);
 
@@ -137,6 +95,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  _createClass(Cron, null, [{
 	    key: 'make',
+
+	    /**
+	     * Generates a new Cron expression based on same data as new instance of Cron
+	     * @method make
+	     * @param {object}  data
+	     * @param {object}  options
+	    **/
 	    value: function make() {
 	      var data = arguments.length <= 0 || arguments[0] === undefined ? { days: [], startTime: null } : arguments[0];
 	      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -217,12 +182,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      return typeof expression === 'string' ? expression : expression.join(' ');
 	    }
+
+	    /**
+	     * Parses an expression and returns respective detailed data object
+	     * @method parse
+	     * @param {string}  expression='* * * * * * *'  - Cron expression to be parsed
+	    **/
 	  }, {
 	    key: 'parse',
 	    value: function parse() {
 	      var expression = arguments.length <= 0 || arguments[0] === undefined ? '* * * * * * *' : arguments[0];
 
-	      // TODO: Handle string days of week instead of integers (e.g.: 'MON', 'TUE')
 	      expression = expression.split(' ').slice(0, 7);
 
 	      var clockUnits = expression.slice(0, 3).map(function (unit) {
@@ -272,6 +242,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        startTime: clockUnits[2] + ':' + clockUnits[1] + ':' + clockUnits[0]
 	      };
 	    }
+
+	    /**
+	     * Optimizes days of week to ranges wherever possible
+	     * @method optimize
+	     * @param {string}  expression  - Cron expression to be optimized, e.g.: '* * * * * 1,2,3,4,5,6'
+	     * @param {object}  options     - Same as when instantiating new Cron (excluding 'optimize' property, of course)
+	    **/
 	  }, {
 	    key: 'optimize',
 	    value: function optimize(expression, options) {
@@ -336,6 +313,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function isExpressionValid(expression) {
 	      // TODO: validate Cron expression
 	      return true;
+	    }
+	  }, {
+	    key: 'DEFAULT_DATA',
+	    get: function get() {
+	      return {
+	        days: [],
+	        startTime: '00:00:00'
+	      };
+	    }
+	  }, {
+	    key: 'DAYS_MAP',
+	    get: function get() {
+	      return {
+	        0: 'SUN',
+	        1: 'MON',
+	        2: 'TUE',
+	        3: 'WED',
+	        4: 'THU',
+	        5: 'FRI',
+	        6: 'SAT'
+	      };
+	    }
+	  }, {
+	    key: 'REVERSE_DAYS_MAP',
+	    get: function get() {
+	      var originalMap = Cron.DAYS_MAP,
+	          reverseMap = {},
+	          keyArr = Object.keys(originalMap);
+
+	      for (var i = 0; i < keyArr.length; i++) {
+	        reverseMap[originalMap[i]] = i;
+	      }
+
+	      return reverseMap;
+	    }
+	  }, {
+	    key: 'DEFAULT_OPTIONS',
+	    get: function get() {
+	      return {
+	        optimize: false,
+	        numeric: true
+	      };
 	    }
 	  }]);
 
