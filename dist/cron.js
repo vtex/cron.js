@@ -229,26 +229,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return unit === '*' ? '00' : unit;
 	      }),
 	          // array
-	      daysOfWeek = expression[5]; // string to be parsed yet
+	      dw = expression[5],
+	          // string to be parsed yet
+	      daysOfWeek = []; // array of days after parse
 
-	      if (daysOfWeek !== '*') {
-	        if (daysOfWeek.indexOf(',') >= 0) {
-	          daysOfWeek = daysOfWeek.split(',');
+	      if (dw !== '*') {
+	        if (dw.indexOf(',') >= 0) {
+	          dw = dw.split(',');
 	        }
 
-	        for (var i = 0; i < daysOfWeek.length; i++) {
-	          if (daysOfWeek[i].indexOf('-') >= 0) {
-	            var range = daysOfWeek[i].split('-').map(function (d) {
-	              return parseInt(d);
-	            }),
-	                diff = range[range.length - 1] - range[0],
-	                days = [range[0]];
+	        for (var i = 0; i < dw.length; i++) {
+	          var day = dw[i];
 
-	            for (var _i = 1; _i <= diff; _i++) {
-	              days.push(range[0] + _i);
+	          if (day.indexOf('-') >= 0) {
+	            var range = day.split('-');
+
+	            range = range.map(function (d) {
+	              if (!isNaN(parseInt(d)) && typeof parseInt(d) === 'number') {
+	                return parseInt(d);
+	              } else {
+	                return Cron.REVERSE_DAYS_MAP[d.substring(0, 3).toUpperCase()];
+	              }
+	            });
+
+	            daysOfWeek.push(range[0]);
+
+	            for (var _i = 1; _i < range[range.length - 1]; _i++) {
+	              daysOfWeek.push(range[0] + _i);
 	            }
-
-	            daysOfWeek = days;
+	          } else {
+	            if (!isNaN(parseInt(day)) && typeof parseInt(day) === 'number') {
+	              daysOfWeek.push(parseInt(day));
+	            } else {
+	              daysOfWeek.push(Cron.REVERSE_DAYS_MAP[day.substring(0, 3).toUpperCase()]);
+	            }
 	          }
 	        }
 	      }

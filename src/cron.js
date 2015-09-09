@@ -70,8 +70,7 @@ class Cron {
       , days = data.days.map( day => {
         if ( !isNaN(parseInt(day)) && typeof parseInt(day) === 'number' ) {
             return parseInt(day);
-        }
-        else {
+        } else {
           isNumeric = false;
           return Cron.REVERSE_DAYS_MAP[day.substring(0, 3).toUpperCase()];
         }
@@ -106,8 +105,7 @@ class Cron {
         if ( !isNumeric ) {
           days = days.map( day => Cron.REVERSE_DAYS_MAP[day] )
         }
-      }
-      else {
+      } else {
         if ( !isNumeric ) {
           days = days.map( day => Cron.DAYS_MAP[day] )
         }
@@ -138,25 +136,42 @@ class Cron {
     expression = expression.split(' ').slice(0, 7);
 
     let clockUnits = expression.slice(0, 3).map( unit => unit === '*' ? '00' : unit ) // array
-      , daysOfWeek = expression[5]; // string to be parsed yet
+      , dw = expression[5] // string to be parsed yet
+      , daysOfWeek = [] // array of days after parse
 
-    if (daysOfWeek !== '*') {
-      if (daysOfWeek.indexOf(',') >= 0) {
-        daysOfWeek = daysOfWeek.split(',');
+    if (dw !== '*') {
+      if (dw.indexOf(',') >= 0) {
+        dw = dw.split(',');
       }
 
-      for (let i = 0; i < daysOfWeek.length; i++) {
-        if (daysOfWeek[i].indexOf('-') >= 0) {
-          let range = daysOfWeek[i].split('-').map( d => parseInt(d) )
-            , diff = range[range.length - 1] - range[0]
-            , days = [range[0]];
+      for (let i = 0; i < dw.length; i++) {
+        let day = dw[i];
 
-          for (let i = 1; i <= diff; i++) {
-            days.push(range[0] + i);
+        if (day.indexOf('-') >= 0) {
+          let range = day.split('-');
+
+          range = range.map( d => {
+            if ( !isNaN(parseInt(d)) && typeof parseInt(d) === 'number' ) {
+              return parseInt(d);
+            } else {
+              return Cron.REVERSE_DAYS_MAP[d.substring(0, 3).toUpperCase()];
+            }
+          });
+
+          daysOfWeek.push( range[0] );
+
+          for (let i = 1; i < range[range.length - 1]; i++) {
+            daysOfWeek.push( range[0] + i );
           }
-
-          daysOfWeek = days;
         }
+        else {
+          if ( !isNaN(parseInt(day)) && typeof parseInt(day) === 'number' ) {
+            daysOfWeek.push(parseInt(day));
+          } else {
+            daysOfWeek.push(Cron.REVERSE_DAYS_MAP[day.substring(0, 3).toUpperCase()]);
+          }
+        }
+
       }
     }
 

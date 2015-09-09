@@ -15,7 +15,7 @@ describe('# Make', function() {
     expect(cron.expression).to.equal('* * 12 * * 1,2,3 *');
   });
 
-  it('should make a new Cron expression with optimized days of the week with given data Object', function() {
+  it('should make a new Cron expression with optimized days of the week with given data object', function() {
     var data = {
       days: [1, 2, 3, 4, 5, 6]
     };
@@ -43,6 +43,32 @@ describe('# Make', function() {
     expect(cron).to.be.an('object');
     expect(cron.expression).to.be.a('string');
     expect(cron.expression).to.equal('* * * * * MON,TUE,WED *');
+  });
+});
+
+describe('# Parse', function() {
+  it('should parse an expression and return data object', function() {
+    var data = Cron.parse('* 30 18 * * 1,4,6 *');
+
+    expect(data).to.be.an('object');
+    expect(data.days).to.be.an('array');
+    expect(data.startTime).to.be.a('string');
+    expect(data.days.length).to.equal(3);
+
+    expect(data.days).to.deep.equal([1, 4, 6]);
+    expect(data.startTime).to.equal('18:30:00');
+  });
+
+  it('should parse an expression (with strings representing days of week instead of integers) and return data object', function() {
+    var data = Cron.parse('* 30 18 * * MON,WED,FRI *');
+
+    expect(data).to.be.an('object');
+    expect(data.days).to.be.an('array');
+    expect(data.startTime).to.be.a('string');
+    expect(data.days.length).to.equal(3);
+
+    expect(data.days).to.deep.equal([1, 3, 5]);
+    expect(data.startTime).to.equal('18:30:00');
   });
 });
 
