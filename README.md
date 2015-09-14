@@ -11,6 +11,8 @@ Weekly Cron expressions parser and generator
 
 #### Node:
 
+*Not published to npm yet!*
+
 ```js
 import Cron from 'cronjs'
 ```
