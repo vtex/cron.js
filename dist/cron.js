@@ -111,14 +111,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      data = _extends({}, Cron.DEFAULT_DATA, data);
 
 	      var defaultExp = '* * * * * * *',
-	          isNumeric = true,
 	          expression = defaultExp.split(' '),
 	          startTime = data.startTime ? data.startTime.split(':').slice(0, 3) : [],
 	          days = data.days.map(function (day) {
 	        if (!isNaN(parseInt(day)) && typeof parseInt(day) === 'number') {
 	          return parseInt(day);
 	        } else {
-	          isNumeric = false;
 	          return Cron.REVERSE_DAYS_MAP[day.substring(0, 3).toUpperCase()];
 	        }
 	      }).sort(function (a, b) {
@@ -150,18 +148,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // Sets days of the week
 	      if (days.length) {
 
-	        if (options.numeric) {
-	          if (!isNumeric) {
-	            days = days.map(function (day) {
-	              return Cron.REVERSE_DAYS_MAP[day];
-	            });
-	          }
-	        } else {
-	          if (!isNumeric) {
-	            days = days.map(function (day) {
-	              return Cron.DAYS_MAP[day];
-	            });
-	          }
+	        if (!options.numeric) {
+	          days = days.map(function (day) {
+	            return Cron.DAYS_MAP[day];
+	          });
 	        }
 
 	        expression[5] = days.join(',');
@@ -255,8 +245,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      options = _extends({}, Cron.DEFAULT_OPTIONS, options);
 
 	      var exp = Array.isArray(expression) ? expression : expression.split(' '),
-	          canBeShorten = null,
-	          isNumeric = true;
+	          canBeShorten = null;
 
 	      if (exp[5] !== '*' && exp[5].indexOf(',') > 0) {
 	        var i = 0,
@@ -264,7 +253,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	          if (!isNaN(parseInt(day)) && typeof parseInt(day) === 'number') {
 	            return parseInt(day);
 	          } else {
-	            isNumeric = false;
 	            return Cron.REVERSE_DAYS_MAP[day];
 	          }
 	        });
@@ -286,18 +274,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          i++;
 	        }
 
-	        if (options.numeric) {
-	          if (!isNumeric) {
-	            days = days.map(function (day) {
-	              return Cron.REVERSE_DAYS_MAP[day];
-	            });
-	          }
-	        } else {
-	          if (!isNumeric) {
-	            days = days.map(function (day) {
-	              return Cron.DAYS_MAP[day];
-	            });
-	          }
+	        if (!options.numeric) {
+	          days = days.map(function (day) {
+	            return Cron.DAYS_MAP[day];
+	          });
 	        }
 
 	        if (canBeShorten) {

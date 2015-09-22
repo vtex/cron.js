@@ -73,14 +73,12 @@ class Cron {
     };
 
     let defaultExp = '* * * * * * *'
-      , isNumeric = true
       , expression = defaultExp.split(' ')
       , startTime = data.startTime ? data.startTime.split(':').slice(0, 3) : []
       , days = data.days.map( day => {
         if ( !isNaN(parseInt(day)) && typeof parseInt(day) === 'number' ) {
             return parseInt(day);
         } else {
-          isNumeric = false;
           return Cron.REVERSE_DAYS_MAP[day.substring(0, 3).toUpperCase()];
         }
       }).sort( (a, b) => a - b );
@@ -110,14 +108,8 @@ class Cron {
     // Sets days of the week
     if (days.length) {
 
-      if ( options.numeric ) {
-        if ( !isNumeric ) {
-          days = days.map( day => Cron.REVERSE_DAYS_MAP[day] )
-        }
-      } else {
-        if ( !isNumeric ) {
-          days = days.map( day => Cron.DAYS_MAP[day] )
-        }
+      if ( !options.numeric ) {
+        days = days.map( day => Cron.DAYS_MAP[day] )
       }
 
       expression[5] = days.join(',');
@@ -208,8 +200,7 @@ class Cron {
     }
 
     let exp = Array.isArray(expression) ? expression : expression.split(' ')
-      , canBeShorten = null
-      , isNumeric = true
+      , canBeShorten = null;
 
     if ( exp[5] !== '*' && exp[5].indexOf(',') > 0 ) {
         let i = 0
@@ -218,7 +209,6 @@ class Cron {
                 return parseInt(day);
               }
               else {
-                isNumeric = false;
                 return Cron.REVERSE_DAYS_MAP[day];
               }
             });
@@ -241,15 +231,8 @@ class Cron {
         i++;
       }
 
-      if ( options.numeric ) {
-        if ( !isNumeric ) {
-          days = days.map( day => Cron.REVERSE_DAYS_MAP[day] )
-        }
-      }
-      else {
-        if ( !isNumeric ) {
-          days = days.map( day => Cron.DAYS_MAP[day] )
-        }
+      if ( !options.numeric ) {
+        days = days.map( day => Cron.DAYS_MAP[day] )
       }
 
       if (canBeShorten) {
