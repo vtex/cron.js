@@ -11,16 +11,16 @@ Weekly Cron expressions parser and generator
 
 #### Node:
 
-*Not published to npm yet!*
+    npm i cron.js --save
 
 ```js
-import Cron from 'cronjs'
+import Cron from 'cron.js'
 ```
 
 *or*
 
 ```js
-var Cron = require('cronjs')
+var Cron = require('cron.js')
 ```
 
 ## Usage
