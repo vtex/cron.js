@@ -94,6 +94,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  _createClass(Cron, null, [{
+	    key: 'getDayOfWeekId',
+	    value: function getDayOfWeekId(day) {
+	      if (!isNaN(parseInt(day)) && typeof parseInt(day) === 'number') {
+	        return parseInt(day);
+	      } else {
+	        return Cron.REVERSE_DAYS_MAP[day.substring(0, 3).toUpperCase()];
+	      }
+	    }
+	  }, {
 	    key: 'make',
 
 	    /**
@@ -113,13 +122,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var defaultExp = '* * * * * * *',
 	          expression = defaultExp.split(' '),
 	          startTime = data.startTime ? data.startTime.split(':').slice(0, 3) : [],
-	          days = data.days.map(function (day) {
-	        if (!isNaN(parseInt(day)) && typeof parseInt(day) === 'number') {
-	          return parseInt(day);
-	        } else {
-	          return Cron.REVERSE_DAYS_MAP[day.substring(0, 3).toUpperCase()];
-	        }
-	      }).sort(function (a, b) {
+	          days = data.days.map(Cron.getDayOfWeekId).sort(function (a, b) {
 	        return a - b;
 	      });
 
@@ -204,13 +207,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          if (day.indexOf('-') >= 0) {
 	            var range = day.split('-');
 
-	            range = range.map(function (d) {
-	              if (!isNaN(parseInt(d)) && typeof parseInt(d) === 'number') {
-	                return parseInt(d);
-	              } else {
-	                return Cron.REVERSE_DAYS_MAP[d.substring(0, 3).toUpperCase()];
-	              }
-	            });
+	            range = range.map(Cron.getDayOfWeekId);
 
 	            daysOfWeek.push(range[0]);
 
@@ -218,11 +215,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              daysOfWeek.push(range[0] + _i);
 	            }
 	          } else {
-	            if (!isNaN(parseInt(day)) && typeof parseInt(day) === 'number') {
-	              daysOfWeek.push(parseInt(day));
-	            } else {
-	              daysOfWeek.push(Cron.REVERSE_DAYS_MAP[day.substring(0, 3).toUpperCase()]);
-	            }
+	            daysOfWeek.push(Cron.getDayOfWeekId(day));
 	          }
 	        }
 	      }
@@ -249,13 +242,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      if (exp[5] !== '*' && exp[5].indexOf(',') > 0) {
 	        var i = 0,
-	            days = exp[5].split(',').map(function (day) {
-	          if (!isNaN(parseInt(day)) && typeof parseInt(day) === 'number') {
-	            return parseInt(day);
-	          } else {
-	            return Cron.REVERSE_DAYS_MAP[day];
-	          }
-	        });
+	            days = exp[5].split(',').map(Cron.getDayOfWeekId);
 
 	        if (!(days || days.length)) {
 	          return expression;

@@ -48,6 +48,14 @@ class Cron {
     return reverseMap;
   }
 
+  static getDayOfWeekId(day) {
+    if ( !isNaN(parseInt(day)) && typeof parseInt(day) === 'number' ) {
+        return parseInt(day);
+    } else {
+      return Cron.REVERSE_DAYS_MAP[day.substring(0, 3).toUpperCase()];
+    }
+  }
+
   static get DEFAULT_OPTIONS() {
     return {
       optimize: false,
@@ -75,13 +83,7 @@ class Cron {
     let defaultExp = '* * * * * * *'
       , expression = defaultExp.split(' ')
       , startTime = data.startTime ? data.startTime.split(':').slice(0, 3) : []
-      , days = data.days.map( day => {
-        if ( !isNaN(parseInt(day)) && typeof parseInt(day) === 'number' ) {
-            return parseInt(day);
-        } else {
-          return Cron.REVERSE_DAYS_MAP[day.substring(0, 3).toUpperCase()];
-        }
-      }).sort( (a, b) => a - b );
+      , days = data.days.map(Cron.getDayOfWeekId).sort( (a, b) => a - b );
 
     // Sets hours, minutes and seconds
     if (startTime.length) {
@@ -155,13 +157,7 @@ class Cron {
         if (day.indexOf('-') >= 0) {
           let range = day.split('-');
 
-          range = range.map( d => {
-            if ( !isNaN(parseInt(d)) && typeof parseInt(d) === 'number' ) {
-              return parseInt(d);
-            } else {
-              return Cron.REVERSE_DAYS_MAP[d.substring(0, 3).toUpperCase()];
-            }
-          });
+          range = range.map(Cron.getDayOfWeekId);
 
           daysOfWeek.push( range[0] );
 
@@ -170,11 +166,7 @@ class Cron {
           }
         }
         else {
-          if ( !isNaN(parseInt(day)) && typeof parseInt(day) === 'number' ) {
-            daysOfWeek.push(parseInt(day));
-          } else {
-            daysOfWeek.push(Cron.REVERSE_DAYS_MAP[day.substring(0, 3).toUpperCase()]);
-          }
+          daysOfWeek.push(Cron.getDayOfWeekId(day));
         }
 
       }
@@ -204,14 +196,7 @@ class Cron {
 
     if ( exp[5] !== '*' && exp[5].indexOf(',') > 0 ) {
         let i = 0
-          , days = exp[5].split(',').map( day => {
-              if ( !isNaN(parseInt(day)) && typeof parseInt(day) === 'number' ) {
-                return parseInt(day);
-              }
-              else {
-                return Cron.REVERSE_DAYS_MAP[day];
-              }
-            });
+          , days = exp[5].split(',').map(Cron.getDayOfWeekId);
 
       if ( !(days || days.length) ) {
         return expression;
