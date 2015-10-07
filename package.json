@@ -1,7 +1,7 @@
 {
   "name": "cron.js",
-  "version": "0.1.2",
-  "description": "Cron expressions parser and generator for JavaScript (browser and server)",
+  "version": "1.0.0",
+  "description": "Cron (weekly) expressions parser and generator for JavaScript (browser and server)",
   "main": "./dist/cron.js",
   "dependencies": {
     "babel": "^5.8.21"

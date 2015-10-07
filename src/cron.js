@@ -5,7 +5,7 @@
  * @param {number[]}    data.days                 - List of selected days, e.g.: [1, 2, 3] or ['MON', 'TUE', 'WED'] or [1, 'TUE', 3]
  * @param {string}      data.startTime=00:00:00   - HH:mm:ss, e.g.: '18:30:00'
  * @param {object}      options                   - Custom options
- * @param {boolean}     options.optimize=false    - If expresison should have it's week days optimized when making or instantiating
+ * @param {boolean}     options.shorten=false     - If expresison should have it's week days shorten when making or instantiating
  * @param {boolean}     options.numeric=true      - If days of week should be represented as integers in new expression (instead of strings of 3 characters each)
 **/
 class Cron {
@@ -58,7 +58,7 @@ class Cron {
 
   static get DEFAULT_OPTIONS() {
     return {
-      optimize: false,
+      shorten: false,
       numeric: true
     };
   }
@@ -102,10 +102,10 @@ class Cron {
     }
 
     // Sets day of the month
-    // expression[3] = ...
+    // expression[3] = ... TODO
 
     // Sets month
-    // expression[4] = ...
+    // expression[4] = ... TODO
 
     // Sets days of the week
     if (days.length) {
@@ -116,14 +116,14 @@ class Cron {
 
       expression[5] = days.join(',');
 
-      if (options.optimize) {
-        expression = Cron.optimize(expression, options);
+      if (options.shorten) {
+        expression = Cron.shorten(expression, options);
       }
 
     }
 
     // Sets year
-    // expression[6] = ...
+    // expression[6] = ... TODO
 
     if ( !Cron.isExpressionValid(expression) ) {
       let message = new Error('Failed to make Cron expression...', expression);
@@ -180,12 +180,12 @@ class Cron {
   }
 
   /**
-   * Optimizes days of week to ranges wherever possible
-   * @method optimize
-   * @param {string}  expression  - Cron expression to be optimized, e.g.: '* * * * * 1,2,3,4,5,6'
-   * @param {object}  options     - Same as when instantiating new Cron (excluding 'optimize' property, of course)
+   * Shortens days of week to ranges wherever possible
+   * @method shorten
+   * @param {string}  expression  - Cron expression to be shorten, e.g.: '* * * * * 1,2,3,4,5,6'
+   * @param {object}  options     - Same as when instantiating new Cron (excluding 'shorten' property, of course)
   **/
-  static optimize(expression, options) {
+  static shorten(expression, options) {
     options = {
       ...Cron.DEFAULT_OPTIONS,
       ...options

@@ -15,13 +15,13 @@ describe('# Make', function() {
     expect(cron.expression).to.equal('* * 12 * * 1,2,3 *');
   });
 
-  it('should make a new Cron expression with optimized days of the week with given data object', function() {
+  it('should make a new Cron expression with shorten days of the week with given data object', function() {
     var data = {
       days: [1, 2, 3, 4, 5, 6]
     };
 
     var options = {
-      optimize: true
+      shorten: true
     };
 
     var cron = new Cron(data, options);
@@ -72,11 +72,11 @@ describe('# Parse', function() {
   });
 });
 
-describe('# Optimize', function() {
-  it('should optimize the days of the week of a given Cron expression', function() {
+describe('# Shorten', function() {
+  it('should shorten the days of the week of a given Cron expression', function() {
     var expression = '* * 12 * * 1,2,3 *'
-      , optimized = Cron.optimize(expression);
+      , shorten = Cron.shorten(expression);
 
-    expect(optimized).to.equal('* * 12 * * 1-3 *');
+    expect(shorten).to.equal('* * 12 * * 1-3 *');
   });
 });
