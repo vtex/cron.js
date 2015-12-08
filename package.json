@@ -1,6 +1,6 @@
 {
   "name": "cron.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cron (weekly) expressions parser and generator for JavaScript (browser and server)",
   "main": "./dist/cron.js",
   "dependencies": {
