@@ -24,6 +24,19 @@ var Cron = require('cron.js')
 ```
 
 ## Usage
+
+Days map reference:
+```js
+1: 'SUN'
+2: 'MON'
+3: 'TUE'
+4: 'WED'
+5: 'THU'
+6: 'FRI'
+7: 'SAT'
+```
+
+Examples:
 ```js
 let data = {
   days: [1, 2, 3, 4, 5, 6],
@@ -32,9 +45,9 @@ let data = {
 
 /* make */
 new Cron( data, { shorten: true } ).expression;        //  '* 30 18 * * 1-5 *'
-new Cron( data, { numeric: false } ).expression;        //  '* 30 18 * * MON,TUE,WED,THU,FRI *'
+new Cron( data, { numeric: false } ).expression;        //  '* 30 18 * * SUN,MON,TUE,WED,THU,FRI *'
 new Cron( { days: ['FRI', 'SAT'] } ).expression;        //  '* * * * * 5,6 *'
-Cron.make( data, { numeric: false, shorten: true } );  //  '* 30 18 * * MON-FRI *'
+Cron.make( data, { numeric: false, shorten: true } );  //  '* 30 18 * * SUN-FRI *'
 
 /* parse */
 Cron.parse('* 30 18 * * 1-3');    // { days: [1, 2, 3], startTime: '18:30:00' }
@@ -47,7 +60,7 @@ Cron.parse('* * 12 * * SUN-SAT'); // { days: [0, 1, 2, 3, 4, 5, 6], startTime: '
 
 ```js
 {
-  numeric: true,  // If days of week in output expression should be integers instead of strings (e.g.: 1,2 <- MON,TUE)
+  numeric: true,  // If days of week in output expression should be integers instead of strings (e.g.: 1,2 <- SUN,MON)
   optimize: false // If days of week should be represented in ranges wherever possible (e.g.: 1-6 instead of 1,2,3,4,5,6)
 }
 ```
