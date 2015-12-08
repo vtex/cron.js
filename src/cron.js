@@ -26,13 +26,13 @@ class Cron {
 
   static get DAYS_MAP() {
     return {
-      0: 'SUN',
-      1: 'MON',
-      2: 'TUE',
-      3: 'WED',
-      4: 'THU',
-      5: 'FRI',
-      6: 'SAT'
+      1: 'SUN',
+      2: 'MON',
+      3: 'TUE',
+      4: 'WED',
+      5: 'THU',
+      6: 'FRI',
+      7: 'SAT'
     };
   }
 
