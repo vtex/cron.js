@@ -310,7 +310,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          keyArr = Object.keys(originalMap);
 
 	      for (var i = 0; i < keyArr.length; i++) {
-	        reverseMap[originalMap[i]] = i;
+	        reverseMap[originalMap[i + 1]] = i + 1;
 	      }
 
 	      return reverseMap;
